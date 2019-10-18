@@ -203,6 +203,20 @@ RCT_EXPORT_METHOD(prepare
         fileNameUrl = [NSURL URLWithString:fileName];
         player = [[AVAudioPlayer alloc] initWithContentsOfURL:fileNameUrl
                                                         error:&error];
+    } else if ([fileName hasPrefix:@"file://"]) {
+        NSSearchPathDirectory directory = NSDocumentDirectory;
+        NSString *directoryOption = options[@"directory"];
+        if (directoryOption != nil) {
+            if ([directoryOption isEqualToString:[self getDirectory:NSLibraryDirectory]]) {
+                directory = NSLibraryDirectory;
+            } else if ([directoryOption isEqualToString:[self getDirectory:NSCachesDirectory]]) {
+                directory = NSCachesDirectory;
+            }
+        }
+        NSURL *directoryUrl = [[[NSFileManager defaultManager] URLsForDirectory:directory inDomains:NSUserDomainMask] lastObject];
+        fileNameUrl = [directoryUrl URLByAppendingPathComponent:[NSURL fileURLWithPath:fileName].lastPathComponent];
+        player = [[AVAudioPlayer alloc] initWithContentsOfURL:fileNameUrl
+                                                        error:&error];
     } else {
         fileNameUrl = [NSURL URLWithString:fileName];
         player = [[AVAudioPlayer alloc] initWithContentsOfURL:fileNameUrl
