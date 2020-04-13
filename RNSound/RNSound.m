@@ -216,12 +216,12 @@ RCT_EXPORT_METHOD(prepare
         }
         NSURL *directoryUrl = [[[NSFileManager defaultManager] URLsForDirectory:directory inDomains:NSUserDomainMask] lastObject];
         fileNameUrl = [directoryUrl URLByAppendingPathComponent:[NSURL fileURLWithPath:fileName].lastPathComponent];
-        player = [[AVAudioPlayer alloc] initWithContentsOfURL:fileNameUrl
-                                                        error:&error];
+        NSData *data = [NSData dataWithContentsOfFile:fileNameUrl];
+        player = [[AVAudioPlayer alloc] initWithData:data error:&error];
     } else {
         fileNameUrl = [NSURL URLWithString:fileNameEscaped];
-        player = [[AVAudioPlayer alloc] initWithContentsOfURL:fileNameUrl
-                                                        error:&error];
+        NSData *data = [NSData dataWithContentsOfURL:fileNameUrl];
+        player = [[AVAudioPlayer alloc] initWithData:data error:&error];
     }
 
     if (player) {
