@@ -219,7 +219,7 @@ RCT_EXPORT_METHOD(prepare
         NSData *data = [NSData dataWithContentsOfFile:fileNameUrl];
         player = [[AVAudioPlayer alloc] initWithData:data error:&error];
     } else {
-        fileNameUrl = [NSURL URLWithString:fileNameEscaped];
+        fileNameUrl = [NSURL URLWithString:[fileNameEscaped stringByRemovingPercentEncoding]];
         player = [[AVAudioPlayer alloc] initWithContentsOfURL:fileNameUrl
                                                         error:&error];
     }
